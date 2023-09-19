@@ -1,5 +1,7 @@
 import streamlit
 
+from map_utils import add_folium_map
+
 
 def page_content():
     streamlit.markdown(
@@ -7,8 +9,8 @@ def page_content():
         # Use the map to explore BikePoint locations
         """
     )
+    add_folium_map()
 
 
-############ Script ############# # noqa
 streamlit.set_page_config(page_title="Map", layout="wide")
 page_content()
