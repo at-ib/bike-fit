@@ -1,6 +1,14 @@
+import json
+
 import folium
 import seaborn
+import streamlit
 
+from constants import AREA_CODE_FIELD, AREA_NAME_FIELD
+from data_utils import get_london_msoa_codes
+from settings import DATA_DIR
+
+MSOA_BOUNDARIES = "msoa.geojson"
 
 def get_bike_point_map(bike_points):
     m = get_folium_map()
@@ -25,3 +33,27 @@ def get_palette(n_colors):
 
 def get_folium_map():
     return folium.Map(location=[51.5, -0.118], zoom_start=12, tiles="cartodbpositron", prefer_canvas=True, min_zoom=8)
+
+
+def add_folium_layer(boundaries, m, smooth_factor=0, style=None):
+    if style is None:
+        style = {}
+    folium.GeoJson(
+        boundaries,
+        name="geojson_layer",
+        tooltip=folium.GeoJsonTooltip(fields=[AREA_NAME_FIELD], labels=False, sticky=True),
+        smooth_factor=smooth_factor,
+        style_function=lambda feature: style,
+    ).add_to(m)
+    return m
+
+
+@streamlit.cache_data
+def get_london_msoa_boundaries():
+    with open(DATA_DIR / MSOA_BOUNDARIES) as f:
+        boundaries = json.load(f)
+    london_msoa_codes = get_london_msoa_codes()
+    boundaries["features"] = [feat for feat in boundaries["features"] if feat["properties"][AREA_CODE_FIELD] in london_msoa_codes]
+    return boundaries
+
+
