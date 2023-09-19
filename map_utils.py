@@ -1,6 +1,5 @@
 import folium
 import seaborn
-from streamlit_folium import st_folium
 
 
 def get_bike_point_map(bike_points):
@@ -11,7 +10,12 @@ def get_bike_point_map(bike_points):
 def add_bike_points(bike_points, m):
     pal = get_palette(1)
     for i in bike_points.index:
-        folium.CircleMarker(location=(bike_points.loc[i, "lat"], bike_points.loc[i, "lon"]), color=pal[0], radius=4, tooltip=f'{bike_points.loc[i, "NbDocks"]} docks').add_to(m)
+        folium.CircleMarker(
+            location=(bike_points.loc[i, "lat"], bike_points.loc[i, "lon"]),
+            color=pal[0],
+            radius=4,
+            tooltip=f'{bike_points.loc[i, "NbDocks"]} docks',
+        ).add_to(m)
     return m
 
 
