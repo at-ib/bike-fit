@@ -34,11 +34,18 @@ def get_fingertips_data_by_indicator_id(indicator_id):
     return pandas.read_csv(io.StringIO(response.text), low_memory=False)
 
 
-@streamlit.cache_data
+# @streamlit.cache_data
 def get_prevalance_of_overwieght_year_6():
     # ID is from https://fingertips.phe.org.uk/profile/national-child-measurement-programme/data
+    # With more time I would find adult data
     indicator_id = 93108
     df = get_fingertips_data_by_indicator_id(indicator_id)
     df = df[df["Area Type"] == "MSOA"]
     df = df[df["Time period"] == LATEST_PERIOD]
-    return df[["Area Code", "Area Name",  "Value"]]
+    df = df[df["Area Code"].isin(get_london_msoa_codes())]
+    return df[["Area Code", "Area Name",  "Value"]].set_index("Area Code")
+
+
+def get_london_msoa_codes():
+    df = pandas.read_csv("data/london-msoa-data.csv").dropna()
+    return df["Middle Super Output Area"]
