@@ -1,11 +1,23 @@
 import folium
+import seaborn
 from streamlit_folium import st_folium
 
 
-def add_folium_map():
+def get_bike_point_map(bike_points):
     m = get_folium_map()
-    st_folium(m, height=700, width=900, use_container_width=False, returned_objects=["last_object_clicked_tooltip"])
+    return add_bike_points(bike_points, m)
+
+
+def add_bike_points(bike_points, m):
+    pal = get_palette(1)
+    for i in bike_points.index:
+        folium.CircleMarker(location=(bike_points.loc[i, "lat"], bike_points.loc[i, "lon"]), color=pal[0], radius=4).add_to(m)
+    return m
+
+
+def get_palette(n_colors):
+    return seaborn.color_palette("magma", n_colors=n_colors).as_hex()
 
 
 def get_folium_map():
-    return folium.Map(location=[51.5, -0.118], zoom_start=10, tiles="cartodbpositron", prefer_canvas=True, min_zoom=8)
+    return folium.Map(location=[51.5, -0.118], zoom_start=12, tiles="cartodbpositron", prefer_canvas=True, min_zoom=8)
