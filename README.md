@@ -4,7 +4,11 @@ A project to explore how we can encourage people to exercise using London's bike
 
 ## Running the app
 
-`streamlit run Home.py`
+1. Clone the repo
+
+2. Install requirements: `pip install -r requirements.txt` (preferably in a virtual environment)
+
+3. Run the app with `streamlit run Home.py`
 
 ## Preparing the data
 
@@ -19,3 +23,8 @@ I converted them to EPSG:4326 by installing gdal (`brew install gdal`) and then 
 ## Formatting
 
 Run linters and formatters with `make tidy`
+
+
+## Tests
+
+With more time I would have written some tests!
