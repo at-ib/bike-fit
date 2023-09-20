@@ -55,3 +55,9 @@ def get_usage_by_bike_point():
 def count_vals(ser, name):
     # There's probably a more elegant way to do this
     return pandas.DataFrame(ser.value_counts()).rename(columns={"count": name})
+
+
+def get_starts_per_dock(docks, starts):
+    df = pandas.merge(docks, starts, on="Area Code", suffixes=("Starts", "Docks"))
+    df = df.assign(Value=df["ValueStarts"]/df["ValueDocks"])
+    return df[["Area Code", "Value"]]

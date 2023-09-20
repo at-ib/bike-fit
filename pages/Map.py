@@ -1,7 +1,7 @@
 import streamlit
 from streamlit_folium import st_folium
 
-from analysis import get_number_of_docks_per_msoa, get_number_of_journey_starts_or_ends_per_msoa
+from analysis import get_number_of_docks_per_msoa, get_number_of_journey_starts_or_ends_per_msoa, get_starts_per_dock
 from data_utils import get_bike_point_data, get_prevalance_of_overwieght_year_6, get_population_by_msoa, \
     get_number_of_obese_children
 from map_utils import add_boundary_layer, get_london_msoa_boundaries, add_choropleth_layer, \
@@ -16,6 +16,7 @@ LAYER_NAMES = {
     "docks": "Number of BikePoint docks per MSOA",
     "starts": "Number of journeys started in each MSOA",
     "ends": "Number of journeys ended in each MSOA",
+    "starts_per_dock": "Number of journeys started in each MSOA for each dock"
 }
 
 def page_content():
@@ -30,7 +31,9 @@ def page_content():
     boundaries = get_london_msoa_boundaries()
     notes = ""
     # With more time I would restructure this "if, elif" ladder probably using a dictionary
-    if layer_to_show == LAYER_NAMES["boundaries"]:
+    if layer_to_show == LAYER_NAMES["none"]:
+        m = add_bike_points(bike_points, m)
+    elif layer_to_show == LAYER_NAMES["boundaries"]:
         m = add_boundary_layer(boundaries, m)
         m = add_bike_points(bike_points, m)
     elif layer_to_show == LAYER_NAMES["obese_prev"]:
@@ -61,11 +64,22 @@ def page_content():
     elif layer_to_show == LAYER_NAMES["starts"]:
         df = get_number_of_journey_starts_or_ends_per_msoa(bike_points, "starts")
         m = add_choropleth_layer(boundaries, m, df)
-        notes = "With more time I would have normalised by area"
+        notes = """
+        This is usage data for a week in June 2023. With more time I would have looked at the whole year.
+        With more time I also would have normalised by area
+        """
     elif layer_to_show == LAYER_NAMES["ends"]:
         df = get_number_of_journey_starts_or_ends_per_msoa(bike_points, "ends")
         m = add_choropleth_layer(boundaries, m, df)
-        notes = "With more time I would have normalised by area"
+        notes = """
+        This is usage data for a week in June 2023. With more time I would have looked at the whole year.
+        With more time I also would have normalised by area
+        """
+    elif layer_to_show == LAYER_NAMES["starts_per_dock"]:
+        starts = get_number_of_journey_starts_or_ends_per_msoa(bike_points, "starts")
+        docks = get_number_of_docks_per_msoa(bike_points)
+        df = get_starts_per_dock(starts, docks)
+        m = add_choropleth_layer(boundaries, m, df)
     streamlit.markdown(notes)
     st_folium(m, height=700, width=900, use_container_width=False, returned_objects=[])
 
