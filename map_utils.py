@@ -28,7 +28,7 @@ def get_palette(n_colors):
 
 
 def get_folium_map():
-    return folium.Map(location=[51.5, -0.118], zoom_start=12, tiles="cartodbpositron", prefer_canvas=True, min_zoom=8)
+    return folium.Map(location=[51.5, -0.118], zoom_start=10, tiles="cartodbpositron", prefer_canvas=True, min_zoom=8)
 
 
 def add_boundary_layer(boundaries, m, smooth_factor=0, style=None):
