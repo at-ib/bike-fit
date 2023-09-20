@@ -2,6 +2,7 @@ import io
 
 import pandas
 import requests as requests
+import streamlit
 
 from settings import DATA_DIR
 
@@ -42,7 +43,7 @@ def get_fingertips_data_by_indicator_id(indicator_id):
     return pandas.read_csv(io.StringIO(response.text), low_memory=False)
 
 
-# @streamlit.cache_data
+@streamlit.cache_data
 def get_prevalance_of_overwieght_year_6():
     # ID is from https://fingertips.phe.org.uk/profile/national-child-measurement-programme/data
     # With more time I would find adult data
@@ -60,6 +61,7 @@ def get_london_msoa_codes():
     return df["Middle Super Output Area"].to_list()
 
 
+@streamlit.cache_data
 def get_population_by_msoa(age="All Ages"):
     # From https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/middlesuperoutputareamidyearpopulationestimates
     df = pandas.read_csv(DATA_DIR / "msoa-pop.csv", thousands=",")
@@ -68,6 +70,7 @@ def get_population_by_msoa(age="All Ages"):
     return df
 
 
+@streamlit.cache_data
 def get_number_of_obese_children():
     obese_prevalance = get_prevalance_of_overwieght_year_6()
     pop = get_population_by_msoa(age=YEAR_6_AGE)

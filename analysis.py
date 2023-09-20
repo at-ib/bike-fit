@@ -13,7 +13,7 @@ from settings import DATA_DIR
 USAGE_FILE = "374JourneyDataExtract12Jun2023-18Jun2023.csv"
 
 
-# @streamlit.cache_data
+@streamlit.cache_data
 def get_number_of_docks_per_msoa(bike_points):
     bike_points = add_msoa_data(bike_points)
     docks = bike_points[["NbDocks", AREA_CODE_FIELD]].astype({"NbDocks": int, AREA_CODE_FIELD: str}).groupby(AREA_CODE_FIELD, as_index=False).sum()

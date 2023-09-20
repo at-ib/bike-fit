@@ -30,10 +30,18 @@ def page_content():
     bike_points = get_bike_point_data()
     m = get_folium_map()
     boundaries = get_london_msoa_boundaries()
-    notes = ""
+    m, notes = add_map_layer(bike_points, boundaries, layer_to_show, m)
+    if show_bike_points:
+        m = add_bike_points(bike_points, m)
+    streamlit.markdown(notes)
+    st_folium(m, height=700, width=900, use_container_width=False, returned_objects=[])
+
+
+def add_map_layer(bike_points, boundaries, layer_to_show, m):
     # With more time I would restructure this "if, elif" ladder probably using a dictionary
     if layer_to_show == LAYER_NAMES["boundaries"]:
         m = add_boundary_layer(boundaries, m)
+        notes = ""
     elif layer_to_show == LAYER_NAMES["obese_prev"]:
         df = get_prevalance_of_overwieght_year_6()
         m = add_choropleth_layer(boundaries, m, df)
@@ -76,10 +84,9 @@ def page_content():
         df = get_starts_per_dock(starts, docks)
         m = add_choropleth_layer(boundaries, m, df)
         notes = "With more time I would have looked at how this has changed over time"
-    if show_bike_points:
-        m = add_bike_points(bike_points, m)
-    streamlit.markdown(notes)
-    st_folium(m, height=700, width=900, use_container_width=False, returned_objects=[])
+    else:
+        notes = ""
+    return m, notes
 
 
 streamlit.set_page_config(page_title="Map", layout="wide")
