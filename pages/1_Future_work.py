@@ -1,5 +1,7 @@
 import streamlit
 
+from settings import APP_NAME
+
 FUTURE_WORK = """
 1. **Look at the average number of BikePoints within a 10 minute cycle of a BikePoint for each MSOA**.
 If this number is small people may be less likely to use the bikes.
@@ -21,5 +23,5 @@ def page_content():
     streamlit.markdown(FUTURE_WORK)
 
 
-streamlit.set_page_config(page_title="Future work")
+streamlit.set_page_config(page_title=f"{APP_NAME}: Future work")
 page_content()

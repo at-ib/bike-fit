@@ -2,6 +2,10 @@
 
 A project to explore how we can encourage people to exercise using London's bike sharing scheme
 
+## Running the app
+
+`streamlit run Home.py`
+
 ## Preparing the data
 
 I have committed the data to this repo.

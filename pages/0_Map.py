@@ -2,6 +2,7 @@ import streamlit
 from streamlit_folium import st_folium
 
 from analysis import get_number_of_docks_per_msoa, get_number_of_journey_starts_or_ends_per_msoa, get_starts_per_dock
+from settings import APP_NAME
 from data_utils import get_bike_point_data, get_prevalance_of_overwieght_year_6, get_population_by_msoa, \
     get_number_of_obese_children
 from map_utils import add_boundary_layer, get_london_msoa_boundaries, add_choropleth_layer, \
@@ -90,5 +91,5 @@ def add_map_layer(bike_points, boundaries, layer_to_show, m):
     return m, notes
 
 
-streamlit.set_page_config(page_title="Map", layout="wide")
+streamlit.set_page_config(page_title=f"{APP_NAME}: Map", layout="wide")
 page_content()
