@@ -14,9 +14,9 @@ LAYER_NAMES = {
     "pop": "Population choropleth",
     "obese_num": "Number of obese children",
     "docks": "Number of BikePoint docks per MSOA",
-    "starts": "Number of journeys started in each MSOA",
-    "ends": "Number of journeys ended in each MSOA",
-    "starts_per_dock": "Number of journeys started in each MSOA for each dock"
+    "starts": "Number of journeys started per week in each MSOA",
+    "ends": "Number of journeys ended per week in each MSOA",
+    "starts_per_dock": "Number of journeys started per week in each MSOA for each dock"
 }
 
 def page_content():
@@ -80,6 +80,7 @@ def page_content():
         docks = get_number_of_docks_per_msoa(bike_points)
         df = get_starts_per_dock(starts, docks)
         m = add_choropleth_layer(boundaries, m, df)
+        notes = "With more time I would have looked at how this has changed over time"
     streamlit.markdown(notes)
     st_folium(m, height=700, width=900, use_container_width=False, returned_objects=[])
 
