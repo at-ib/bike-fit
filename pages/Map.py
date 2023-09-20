@@ -25,21 +25,18 @@ def page_content():
         # Use the map to explore BikePoint locations
         """
     )
+    show_bike_points = streamlit.toggle("Show BikePoints", value=True)
     layer_to_show = streamlit.radio("Select additional layer", options=LAYER_NAMES.values(), key="layer_to_show")
     bike_points = get_bike_point_data()
     m = get_folium_map()
     boundaries = get_london_msoa_boundaries()
     notes = ""
     # With more time I would restructure this "if, elif" ladder probably using a dictionary
-    if layer_to_show == LAYER_NAMES["none"]:
-        m = add_bike_points(bike_points, m)
-    elif layer_to_show == LAYER_NAMES["boundaries"]:
+    if layer_to_show == LAYER_NAMES["boundaries"]:
         m = add_boundary_layer(boundaries, m)
-        m = add_bike_points(bike_points, m)
     elif layer_to_show == LAYER_NAMES["obese_prev"]:
         df = get_prevalance_of_overwieght_year_6()
         m = add_choropleth_layer(boundaries, m, df)
-        m = add_bike_points(bike_points, m)
         notes = """
         This obesity measure is only for year 6 children. With more time I would have looked for data for adults.
         
@@ -48,14 +45,12 @@ def page_content():
     elif layer_to_show == LAYER_NAMES["pop"]:
         df = get_population_by_msoa()
         m = add_choropleth_layer(boundaries, m, df)
-        m = add_bike_points(bike_points, m)
         notes = """
         With more time I would have looked at where businesses and attractions are.
         """
     elif layer_to_show == LAYER_NAMES["obese_num"]:
         df = get_number_of_obese_children()
         m = add_choropleth_layer(boundaries, m, df)
-        m = add_bike_points(bike_points, m)
         notes = "Potential policy option: A collection of BikePoints in East London around Barking"
     elif layer_to_show == LAYER_NAMES["docks"]:
         df = get_number_of_docks_per_msoa(bike_points)
@@ -81,6 +76,8 @@ def page_content():
         df = get_starts_per_dock(starts, docks)
         m = add_choropleth_layer(boundaries, m, df)
         notes = "With more time I would have looked at how this has changed over time"
+    if show_bike_points:
+        m = add_bike_points(bike_points, m)
     streamlit.markdown(notes)
     st_folium(m, height=700, width=900, use_container_width=False, returned_objects=[])
 
