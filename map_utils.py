@@ -67,7 +67,7 @@ def get_london_msoa_boundaries():
     with open(DATA_DIR / MSOA_BOUNDARIES) as f:
         boundaries = json.load(f)
     london_msoa_codes = get_london_msoa_codes()
-    boundaries["features"] = [feat for feat in boundaries["features"] if feat["properties"][AREA_CODE_FIELD] in london_msoa_codes]
+    boundaries["features"] = [
+        feat for feat in boundaries["features"] if feat["properties"][AREA_CODE_FIELD] in london_msoa_codes
+    ]
     return boundaries
-
-

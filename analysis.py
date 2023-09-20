@@ -1,13 +1,10 @@
 import pandas
 import streamlit
 from geopandas import GeoDataFrame
-
-from constants import AREA_CODE_FIELD
-from data_utils import get_bike_point_data
-from map_utils import get_london_msoa_boundaries
-
 from shapely.geometry import Point
 
+from constants import AREA_CODE_FIELD
+from map_utils import get_london_msoa_boundaries
 from settings import DATA_DIR
 
 USAGE_FILE = "374JourneyDataExtract12Jun2023-18Jun2023.csv"
@@ -16,7 +13,12 @@ USAGE_FILE = "374JourneyDataExtract12Jun2023-18Jun2023.csv"
 @streamlit.cache_data
 def get_number_of_docks_per_msoa(bike_points):
     bike_points = add_msoa_data(bike_points)
-    docks = bike_points[["NbDocks", AREA_CODE_FIELD]].astype({"NbDocks": int, AREA_CODE_FIELD: str}).groupby(AREA_CODE_FIELD, as_index=False).sum()
+    docks = (
+        bike_points[["NbDocks", AREA_CODE_FIELD]]
+        .astype({"NbDocks": int, AREA_CODE_FIELD: str})
+        .groupby(AREA_CODE_FIELD, as_index=False)
+        .sum()
+    )
     return docks.rename(columns={"MSOA11CD": "Area Code", "NbDocks": "Value"})
 
 
@@ -48,7 +50,9 @@ def get_number_of_journey_starts_or_ends_per_msoa(bike_points, starts_or_ends):
 def get_usage_by_bike_point():
     df = pandas.read_csv(DATA_DIR / USAGE_FILE)
     # With more time I would look at journey duration and data for a longer time period
-    df = pandas.concat([count_vals(df["Start station number"], "starts"), count_vals(df["End station number"], "ends")], axis=1)
+    df = pandas.concat(
+        [count_vals(df["Start station number"], "starts"), count_vals(df["End station number"], "ends")], axis=1
+    )
     return df.reset_index(names="station_number")
 
 
@@ -59,5 +63,5 @@ def count_vals(ser, name):
 
 def get_starts_per_dock(docks, starts):
     df = pandas.merge(docks, starts, on="Area Code", suffixes=("Starts", "Docks"))
-    df = df.assign(Value=df["ValueStarts"]/df["ValueDocks"])
+    df = df.assign(Value=df["ValueStarts"] / df["ValueDocks"])
     return df[["Area Code", "Value"]]

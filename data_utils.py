@@ -52,7 +52,7 @@ def get_prevalance_of_overwieght_year_6():
     df = df[df["Area Type"] == "MSOA"]
     df = df[df["Time period"] == LATEST_PERIOD]
     df = df[df["Area Code"].isin(get_london_msoa_codes())]
-    return df[["Area Code", "Area Name",  "Value"]]
+    return df[["Area Code", "Area Name", "Value"]]
 
 
 def get_london_msoa_codes():
@@ -63,7 +63,7 @@ def get_london_msoa_codes():
 
 @streamlit.cache_data
 def get_population_by_msoa(age="All Ages"):
-    # From https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/middlesuperoutputareamidyearpopulationestimates
+    # From https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/middlesuperoutputareamidyearpopulationestimates  # noqa
     df = pandas.read_csv(DATA_DIR / "msoa-pop.csv", thousands=",")
     df = df[df["MSOA Code"].isin(get_london_msoa_codes())]
     df = df[["MSOA Code", age]].rename(columns=POP_RENAME)

@@ -1,12 +1,25 @@
 import streamlit
 from streamlit_folium import st_folium
 
-from analysis import get_number_of_docks_per_msoa, get_number_of_journey_starts_or_ends_per_msoa, get_starts_per_dock
+from analysis import (
+    get_number_of_docks_per_msoa,
+    get_number_of_journey_starts_or_ends_per_msoa,
+    get_starts_per_dock,
+)
+from data_utils import (
+    get_bike_point_data,
+    get_number_of_obese_children,
+    get_population_by_msoa,
+    get_prevalance_of_overwieght_year_6,
+)
+from map_utils import (
+    add_bike_points,
+    add_boundary_layer,
+    add_choropleth_layer,
+    get_folium_map,
+    get_london_msoa_boundaries,
+)
 from settings import APP_NAME
-from data_utils import get_bike_point_data, get_prevalance_of_overwieght_year_6, get_population_by_msoa, \
-    get_number_of_obese_children
-from map_utils import add_boundary_layer, get_london_msoa_boundaries, add_choropleth_layer, \
-    get_folium_map, add_bike_points
 
 LAYER_NAMES = {
     "none": "None",
@@ -17,7 +30,7 @@ LAYER_NAMES = {
     "docks": "Number of BikePoint docks per MSOA",
     "starts": "Number of journeys started per week in each MSOA",
     "ends": "Number of journeys ended per week in each MSOA",
-    "starts_per_dock": "Number of journeys started per week in each MSOA for each dock"
+    "starts_per_dock": "Number of journeys started per week in each MSOA for each dock",
 }
 
 
@@ -49,7 +62,7 @@ def add_map_layer(bike_points, boundaries, layer_to_show, m):
         m = add_choropleth_layer(boundaries, m, df)
         notes = """
         This obesity measure is only for year 6 children. With more time I would have looked for data for adults.
-        
+
         With more time I also would have considered other measures like IMD
         """
     elif layer_to_show == LAYER_NAMES["pop"]:
