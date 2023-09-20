@@ -2,6 +2,8 @@
 
 A streamlit app to explore how we can encourage people to exercise using London's bike sharing scheme.
 
+The app is currently hosted on [Streamlit community cloud](https://bike-fit-fg7r2rc9nttqraxbrbmmzc.streamlit.app).
+
 ## Running the app
 
 1. Clone the repo
