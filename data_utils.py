@@ -43,7 +43,7 @@ def get_prevalance_of_overwieght_year_6():
     df = df[df["Area Type"] == "MSOA"]
     df = df[df["Time period"] == LATEST_PERIOD]
     df = df[df["Area Code"].isin(get_london_msoa_codes())]
-    return df[["Area Code", "Area Name",  "Value"]].set_index("Area Code")
+    return df[["Area Code", "Area Name",  "Value"]]
 
 
 def get_london_msoa_codes():

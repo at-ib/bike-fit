@@ -10,10 +10,6 @@ from settings import DATA_DIR
 
 MSOA_BOUNDARIES = "msoa.geojson"
 
-def get_bike_point_map(bike_points):
-    m = get_folium_map()
-    return add_bike_points(bike_points, m)
-
 
 def add_bike_points(bike_points, m):
     pal = get_palette(1)
@@ -35,7 +31,7 @@ def get_folium_map():
     return folium.Map(location=[51.5, -0.118], zoom_start=12, tiles="cartodbpositron", prefer_canvas=True, min_zoom=8)
 
 
-def add_folium_layer(boundaries, m, smooth_factor=0, style=None):
+def add_boundary_layer(boundaries, m, smooth_factor=0, style=None):
     if style is None:
         style = {}
     folium.GeoJson(
@@ -44,6 +40,24 @@ def add_folium_layer(boundaries, m, smooth_factor=0, style=None):
         tooltip=folium.GeoJsonTooltip(fields=[AREA_NAME_FIELD], labels=False, sticky=True),
         smooth_factor=smooth_factor,
         style_function=lambda feature: style,
+    ).add_to(m)
+    return m
+
+
+def add_choropleth_layer(boundaries, m, data, smooth_factor=0):
+    folium.Choropleth(
+        boundaries,
+        name="choropleth",
+        data=data,
+        columns=["Area Code", "Value"],
+        key_on=f"feature.properties.{AREA_CODE_FIELD}",
+        fill_color="GnBu",
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name="Value",
+        highlight=True,
+        smooth_factor=smooth_factor,
+        style_function=lambda feature: {"weight": 0.5},
     ).add_to(m)
     return m
 
