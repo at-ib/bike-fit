@@ -19,6 +19,7 @@ LAYER_NAMES = {
     "starts_per_dock": "Number of journeys started per week in each MSOA for each dock"
 }
 
+
 def page_content():
     streamlit.markdown(
         """
