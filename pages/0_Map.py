@@ -22,14 +22,12 @@ from map_utils import (
 from settings import APP_NAME
 
 LAYER_NAMES = {
-    "none": "None",
     "boundaries": "MSOA boundaries",
-    "obese_prev": "Obesity prevalance choropleth",
-    "pop": "Population choropleth",
+    "pop": "MSOA population",
+    "obese_prev": "Obesity prevalance",
     "obese_num": "Number of obese children",
     "docks": "Number of BikePoint docks per MSOA",
     "starts": "Number of journeys started per week in each MSOA",
-    "ends": "Number of journeys ended per week in each MSOA",
     "starts_per_dock": "Number of journeys started per week in each MSOA for each dock",
 }
 
@@ -81,13 +79,6 @@ def add_map_layer(bike_points, boundaries, layer_to_show, m):
         notes = "With more time I would have done the number of docks per area"
     elif layer_to_show == LAYER_NAMES["starts"]:
         df = get_number_of_journey_starts_or_ends_per_msoa(bike_points, "starts")
-        m = add_choropleth_layer(boundaries, m, df)
-        notes = """
-        This is usage data for a week in June 2023. With more time I would have looked at the whole year.
-        With more time I also would have normalised by area
-        """
-    elif layer_to_show == LAYER_NAMES["ends"]:
-        df = get_number_of_journey_starts_or_ends_per_msoa(bike_points, "ends")
         m = add_choropleth_layer(boundaries, m, df)
         notes = """
         This is usage data for a week in June 2023. With more time I would have looked at the whole year.
