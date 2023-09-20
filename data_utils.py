@@ -2,7 +2,6 @@ import io
 
 import pandas
 import requests as requests
-import streamlit
 
 from settings import DATA_DIR
 
